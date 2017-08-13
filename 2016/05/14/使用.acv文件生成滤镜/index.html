@@ -105,7 +105,7 @@
 <meta property="og:image" content="http://7xoiwu.com1.z0.glb.clouddn.com/acv_save.jpg">
 <meta property="og:image" content="http://7xoiwu.com1.z0.glb.clouddn.com/acv_undecode.jpg">
 <meta property="og:image" content="http://7xoiwu.com1.z0.glb.clouddn.com/acv_channels.jpg">
-<meta property="og:updated_time" content="2017-08-13T12:49:26.000Z">
+<meta property="og:updated_time" content="2017-08-13T14:37:15.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content=".acv文件是什么">
 <meta name="twitter:description" content="因为毕业设计做的是一个美图类的Android应用程序，所以自然需要实现滤镜这一基本功能。虽然我的滤镜实现使用的是开源的Android-gpuimage，但是作为毕业设计而言，不能仅仅是会写就可以，其内部原理也需要有一定理解才能在答辩的时候不会慌张。所以我根据对GPUImage源码的一些研究以及查找的一些资料来记录下我的App中滤镜的实现过程。 在我实现滤镜的过程中，主要有两种思路，一种是使用RGB">
@@ -398,7 +398,7 @@
 <p>As long as you save a file in a format supporting the image’s color mode, the color channels are preserved. Alpha channels are preserved only when you save a file in Photoshop, PDF, TIFF, PSB, or raw formats. DCS 2.0 format preserves only spot channels. Saving in other formats may cause channel information to be discarded.</p>
 </blockquote>
 <p>大概意思是，只要你保存文件的格式支持图像颜色模式，那么颜色通道(rgb)都会被保留。但Alpha通道只有你在使用PS保存文件为PDF，TIFF，PSB或者原始格式时才会保留。DCS 2.0格式只保留专色通道，使用其他格式保存可能会丢失通道信息。</p>
-<p>由此可以推测出，最后一条曲线，应该就是<code>Alpha通道</code>了。</p>
+<p>由此可以推测出，最后一条曲线，就是<code>Alpha通道</code>了。</p>
 
       
     </div>
