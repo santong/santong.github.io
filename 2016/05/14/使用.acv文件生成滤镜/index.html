@@ -39,7 +39,7 @@
 
   
   
-  <link href="/blog/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
 
 
@@ -73,9 +73,9 @@
 
 
 
-<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/blog/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
   <meta name="keywords" content="Android,滤镜,解析,算法," />
@@ -87,7 +87,7 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/blog/favicon.ico?v=5.1.2" />
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
 
 
 
@@ -98,7 +98,7 @@
 <meta name="keywords" content="Android,滤镜,解析,算法">
 <meta property="og:type" content="article">
 <meta property="og:title" content=".acv文件是什么">
-<meta property="og:url" content="http://santong.me/blog/2016/05/14/使用.acv文件生成滤镜/index.html">
+<meta property="og:url" content="http://santong.me/2016/05/14/使用.acv文件生成滤镜/index.html">
 <meta property="og:site_name" content="三筒">
 <meta property="og:description" content="因为毕业设计做的是一个美图类的Android应用程序，所以自然需要实现滤镜这一基本功能。虽然我的滤镜实现使用的是开源的Android-gpuimage，但是作为毕业设计而言，不能仅仅是会写就可以，其内部原理也需要有一定理解才能在答辩的时候不会慌张。所以我根据对GPUImage源码的一些研究以及查找的一些资料来记录下我的App中滤镜的实现过程。 在我实现滤镜的过程中，主要有两种思路，一种是使用RGB">
 <meta property="og:locale" content="zh-Hans">
@@ -116,7 +116,7 @@
 <script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    root: '/blog/',
+    root: '/',
     scheme: 'Gemini',
     sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
@@ -138,7 +138,7 @@
 
 
 
-  <link rel="canonical" href="http://santong.me/blog/2016/05/14/使用.acv文件生成滤镜/"/>
+  <link rel="canonical" href="http://santong.me/2016/05/14/使用.acv文件生成滤镜/"/>
 
 
 
@@ -182,7 +182,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/blog/"  class="brand" rel="start">
+      <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">三筒</span>
         <span class="logo-line-after"><i></i></span>
@@ -210,7 +210,7 @@
       
         
         <li class="menu-item menu-item-home">
-          <a href="/blog/" rel="section">
+          <a href="/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
@@ -220,7 +220,7 @@
       
         
         <li class="menu-item menu-item-about">
-          <a href="/blog/about/" rel="section">
+          <a href="/about/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
             
@@ -230,7 +230,7 @@
       
         
         <li class="menu-item menu-item-archives">
-          <a href="/blog/archives/" rel="section">
+          <a href="/archives/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
@@ -240,7 +240,7 @@
       
         
         <li class="menu-item menu-item-tags">
-          <a href="/blog/tags/" rel="section">
+          <a href="/tags/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
@@ -281,12 +281,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://santong.me/blog/blog/2016/05/14/使用.acv文件生成滤镜/">
+    <link itemprop="mainEntityOfPage" href="http://santong.me/2016/05/14/使用.acv文件生成滤镜/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="三筒">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/blog/images/avatar.jpeg">
+      <meta itemprop="image" content="/images/avatar.jpeg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -416,13 +416,13 @@
       
         <div class="post-tags">
           
-            <a href="/blog/tags/Android/" rel="tag"># Android</a>
+            <a href="/tags/Android/" rel="tag"># Android</a>
           
-            <a href="/blog/tags/滤镜/" rel="tag"># 滤镜</a>
+            <a href="/tags/滤镜/" rel="tag"># 滤镜</a>
           
-            <a href="/blog/tags/解析/" rel="tag"># 解析</a>
+            <a href="/tags/解析/" rel="tag"># 解析</a>
           
-            <a href="/blog/tags/算法/" rel="tag"># 算法</a>
+            <a href="/tags/算法/" rel="tag"># 算法</a>
           
         </div>
       
@@ -435,7 +435,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blog/2015/11/19/android_mvp/" rel="next" title="Android MVP设计模式学习笔记">
+              <a href="/2015/11/19/android_mvp/" rel="next" title="Android MVP设计模式学习笔记">
                 <i class="fa fa-chevron-left"></i> Android MVP设计模式学习笔记
               </a>
             
@@ -508,7 +508,7 @@
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="/blog/images/avatar.jpeg"
+               src="/images/avatar.jpeg"
                alt="三筒" />
           <p class="site-author-name" itemprop="name">三筒</p>
            
@@ -519,7 +519,7 @@
 
           
             <div class="site-state-item site-state-posts">
-              <a href="/blog/archives/">
+              <a href="/archives/">
                 <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">日志</span>
               </a>
@@ -541,7 +541,7 @@
             
             
             <div class="site-state-item site-state-tags">
-              <a href="/blog/tags/index.html">
+              <a href="/tags/index.html">
                 <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">标签</span>
               </a>
@@ -706,53 +706,53 @@
 
 
   
-  <script type="text/javascript" src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
 
   
-  <script type="text/javascript" src="/blog/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
 
   
-  <script type="text/javascript" src="/blog/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
 
   
-  <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
 
   
-  <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
 
   
-  <script type="text/javascript" src="/blog/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-
-
-  
-
-
-  <script type="text/javascript" src="/blog/js/src/utils.js?v=5.1.2"></script>
-
-  <script type="text/javascript" src="/blog/js/src/motion.js?v=5.1.2"></script>
-
-
-
-  
-  
-
-
-  <script type="text/javascript" src="/blog/js/src/affix.js?v=5.1.2"></script>
-
-  <script type="text/javascript" src="/blog/js/src/schemes/pisces.js?v=5.1.2"></script>
-
-
-
-  
-  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=5.1.2"></script>
-<script type="text/javascript" src="/blog/js/src/post-details.js?v=5.1.2"></script>
-
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
 
 
   
 
 
-  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=5.1.2"></script>
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
 
 
 
