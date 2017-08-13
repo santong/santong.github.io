@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/blog/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/blog/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="学习笔记,数据库,Oracle," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/blog/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="本篇内容主要是基础知识，简单查询语句以及一些Oracle的常用函数。 大部分内容都是平时上课或是从老师ppt总结的，部分有参考《Oracle Datebase 11g SQL 开发之南》，如有不准确或是不正确的地方还望指正。 建表语句可以从如下链接下载：store_schema.sql 下载完成后用记事本打开，复制全部内容在command window下即可（开始可能会有报错，无视就好，原因是建表">
+<meta name="keywords" content="学习笔记,数据库,Oracle">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Oracle 基础知识">
+<meta property="og:url" content="http://santong.me/blog/2015/04/08/Oracle 知识点整理/index.html">
+<meta property="og:site_name" content="三筒">
+<meta property="og:description" content="本篇内容主要是基础知识，简单查询语句以及一些Oracle的常用函数。 大部分内容都是平时上课或是从老师ppt总结的，部分有参考《Oracle Datebase 11g SQL 开发之南》，如有不准确或是不正确的地方还望指正。 建表语句可以从如下链接下载：store_schema.sql 下载完成后用记事本打开，复制全部内容在command window下即可（开始可能会有报错，无视就好，原因是建表">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-08-13T12:35:34.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Oracle 基础知识">
+<meta name="twitter:description" content="本篇内容主要是基础知识，简单查询语句以及一些Oracle的常用函数。 大部分内容都是平时上课或是从老师ppt总结的，部分有参考《Oracle Datebase 11g SQL 开发之南》，如有不准确或是不正确的地方还望指正。 建表语句可以从如下链接下载：store_schema.sql 下载完成后用记事本打开，复制全部内容在command window下即可（开始可能会有报错，无视就好，原因是建表">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blog/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://santong.me/blog/2015/04/08/Oracle 知识点整理/"/>
+
+
+
+
+
+  <title>Oracle 基础知识 | 三筒</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blog/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">三筒</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/blog/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/blog/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/blog/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/blog/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://santong.me/blog/blog/2015/04/08/Oracle 知识点整理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="三筒">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/blog/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="三筒">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Oracle 基础知识</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-04-08T22:03:54+08:00">
+                2015-04-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本篇内容主要是<strong>基础知识</strong>，<strong>简单查询语句</strong>以及<strong>一些Oracle的常用函数</strong>。</p>
+<p>大部分内容都是平时上课或是从老师ppt总结的，部分有参考《Oracle Datebase 11g SQL 开发之南》，如有不准确或是不正确的地方还望指正。</p>
+<p>建表语句可以从如下链接下载：<a href="http://pan.baidu.com/s/1qWzCdyc" target="_blank" rel="external">store_schema.sql</a></p>
+<p>下载完成后用记事本打开，复制全部内容在command window下即可（开始可能会有报错，无视就好，原因是建表语句中有“drop table XXX;”这一句，防止重复建表，而在建表之前是没有XXX表的，所以会报错）。</p>
+<p><strong>注：</strong></p>
+<ul>
+<li>数据表和《Oracle Datebase 11g SQL 开发之南》中的实例相同。</li>
+<li>转载请标明转载出处 <a href="http://santong.me">http://santong.me</a> 谢谢啦！<a id="more"></a>
+</li>
+</ul>
+<h3 id="基本信息"><a href="#基本信息" class="headerlink" title="基本信息"></a>基本信息</h3><p><strong>Oracle版本：</strong>Oracle 11g</p>
+<p><strong>管理工具：</strong>PL/SQL；</p>
+<p><strong>常用窗口：</strong>command窗口，SQL窗口；</p>
+<p><strong>常用数据库账号：</strong></p>
+<ol>
+<li><p>store/store123（当把建表语句复制进command window时会创建）；</p>
+</li>
+<li><p>system/your_password(有时可能用到，system密码取决于你安装oracle时自己的设置)；</p>
+</li>
+</ol>
+<h3 id="基础SQL语句"><a href="#基础SQL语句" class="headerlink" title="基础SQL语句"></a>基础SQL语句</h3><h4 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h4><ol>
+<li><p>Oracle大小写不敏感，即SELECT 和 select是等价的；</p>
+</li>
+<li><p>Oracle数据表中每行纪录对应不同的rowid，rownum，称为伪列，其中rowid是唯一标示；当执行查询语句时，rownum会根据返回的行从1开始重新顺序编号；</p>
+</li>
+<li><p>Oracle中的表可以不定义主键；</p>
+</li>
+<li><p>可以从dual表中查询与表内容无关的值；</p>
+<pre><code>select 1+1 from dual;             // 返回2；
+</code></pre></li>
+<li><p>Oracle中算术运算符有: +  -  *  /</p>
+<pre><code>select to_date(&apos;25-1-2015&apos;)+2    // to_date()为日期函数;
+from dual;                        // 返回2015/1/27;
+</code></pre></li>
+<li><p>可以在查询语句中用as关键字为列设置别名；</p>
+<pre><code>select name,price+2 as price 
+from products;                    // 返回两列，名为name和price；
+</code></pre></li>
+<li><p>使用||连接列；</p>
+<pre><code>// 虽然查询了两个列，但是只返回一列名为Customer Name；
+select first_name||&apos; &apos;||last_name as &quot;Customer Name&quot;
+from customers;                    
+</code></pre></li>
+<li><p>在数据库中难免会有空值null，可以使用is </p>
+<pre><code>select * from  customers
+where dob is null; 
+</code></pre></li>
+<li><p>利用distinct禁止重复显示相同行；</p>
+<pre><code>select distinct customer_id     
+from purchases;
+</code></pre></li>
+<li><p>比较符号有： = , != , &lt;&gt; , &lt; , &gt; , &lt;= , &gt;=；</p>
+<p><strong>注意：与rownum相关的比较符只能是&lt;或者是&lt;=;</strong></p>
+</li>
+<li><p>Oracle 10g引入了两种新的数据类型：BINARY_FLOAT和BINARY_DOUBLE，前者可以存储一个单精度的32位浮点数，后者可以存储一个双精度的64位浮点数，这两种新的数据类型根据二进制浮点运算的IEEE标准提出的。<strong>其需要的存储空间较小，可表示范围更大，执行速度更快，并且运算封闭，取整透明。</strong>如果需要开发一个涉及大量数字运算的系统，建议考虑如上类型。</p>
+</li>
+<li><p>逻辑操作优先级 NOT &gt; AND &gt; OR;</p>
+<pre><code>select * from customers
+where not(dob&gt;&apos;01-1月-1970&apos;); 
+</code></pre></li>
+<li><p>Oracle注释用 “–”</p>
+</li>
+</ol>
+<h4 id="查询语句"><a href="#查询语句" class="headerlink" title="查询语句"></a>查询语句</h4><h5 id="表示所有列："><a href="#表示所有列：" class="headerlink" title="*表示所有列："></a>*表示所有列：</h5><pre><code>select * from student;
+</code></pre><h5 id="where语句来过滤行："><a href="#where语句来过滤行：" class="headerlink" title="where语句来过滤行："></a>where语句来过滤行：</h5><pre><code>select * from student
+where student_id = 2;    
+</code></pre><h5 id="any和some"><a href="#any和some" class="headerlink" title="any和some"></a>any和some</h5><p>表示满足一定范围内任意的值即满足条件(any也可以用some代替)：</p>
+<pre><code>// 返回大于2的customer_id，即只大于2，3，4中的2就满足了条件
+select customer_id from customers
+where customer_id &gt; any(2,3,4);
+</code></pre><h5 id="all"><a href="#all" class="headerlink" title="all"></a>all</h5><p>表示要大于一定范围内所有值才满足条件：</p>
+<pre><code>// 返回大于4的customer_id，即要大于2，3，4中的最大值才满足条件
+select customer_id from customers
+where customer_id&gt;all(2,3,4);
+</code></pre><h5 id="like和not-like"><a href="#like和not-like" class="headerlink" title="like和not like"></a>like和not like</h5><p>用于匹配字符串，_代表一个字符，%代表任意个字符（可以是0个），like可以和not组合使用：</p>
+<pre><code>// 返回first_name中包含一个“o”的名字
+select first_name from customers
+where first_name like &apos;_o%&apos;;
+
+// 返回first_name中不包含“o”的名字
+select first_name from customers
+where first_name not like &apos;_o%&apos;;
+</code></pre><h5 id="escape"><a href="#escape" class="headerlink" title="escape"></a>escape</h5><p>用于当使用like需要匹配”_”或是”%”的时候用来定义转义符：</p>
+<pre><code>select * from promotions
+where name like &apos;%\%%&apos; escape &apos;\&apos;;//此时\为转义符
+</code></pre><h5 id="in和not-in"><a href="#in和not-in" class="headerlink" title="in和not in"></a>in和not in</h5><p>用来检索列值是否在列表中，not in检索不在列表中的列值。</p>
+<p><strong>注意：</strong>当not in和null组合使用时，无任何返回结果，因为null表示不知道是什么值即可能表示任何值，所以查询无任何结果：</p>
+<pre><code>//in
+select * from customers
+where customer_id in (2,3,5,6);
+//not in
+select * from customers
+where customer_id not in (2,3,5,6);
+//查询无结果
+select * from customers
+where customer_id not in (2,3,5,6,null);
+</code></pre><h5 id="between"><a href="#between" class="headerlink" title="between"></a>between</h5><p>检查列值是否在指定区间内：</p>
+<pre><code>select * from customers
+where customer_id between 1 and 3;
+</code></pre><h5 id="order-by子句"><a href="#order-by子句" class="headerlink" title="order by子句"></a>order by子句</h5><p>默认根据列值的升序排列,字句后加desc进行降序排列：</p>
+<pre><code>//根据列last_name排列
+select * from customers
+order by last_name;
+//1代表按表的第一列排序
+select * from customers
+order by 1;
+//字句末家desc进行降序排列
+select * from customers
+order by customer_id desc;
+</code></pre><h5 id="内连接"><a href="#内连接" class="headerlink" title="内连接"></a>内连接</h5><p>目的是进行多张表的联合查询，取多张表的交集，实现有以下几种方式：</p>
+<ul>
+<li><p>第一种方式是inner join…on…;</p>
+<pre><code>//p,pt分别是products和product_types的别名
+select p.name, pt.name
+from products p inner join product_types pt
+on p.product_type_id = pt.product_type_id;
+</code></pre></li>
+<li><p>第二种方式用where匹配过滤;</p>
+<pre><code>//p,pt分别是products和product_types的别名
+select p.name, pt.name
+from products p, product_types pt
+where p.product_type_id = pt.product_type_id;
+</code></pre></li>
+<li><p>第三种方式是比较推荐的，使用using来代替on字句，更加简洁常用;</p>
+<p>  <strong>注意:</strong>using子句中用到的列名如果出现在select子句中，前面不得加表名或者表别名。</p>
+<pre><code>//p,pt分别是products和product_types的别名
+select p.name, pt.name
+from products p inner join product_types pt
+using(product_type_id);
+</code></pre></li>
+</ul>
+<h5 id="左外链接"><a href="#左外链接" class="headerlink" title="左外链接"></a>左外链接</h5><p>同样是进行多张表的联合查询，但显示join左边表的所有数据：</p>
+<ul>
+<li><p>第一种方式，使用where过滤并在where子句中将join右边的表名后面加(+);</p>
+<pre><code>select p.name, pt.name
+from products p, product_types pt
+where p.product_type_id = pt.product_type_id(+);
+</code></pre></li>
+<li><p>第二种方式，使用…left outer join…using…子句;</p>
+<pre><code>select p.name,pt.name
+from products p left outer join product_types pt
+using(product_type_id);
+</code></pre></li>
+</ul>
+<h5 id="右外链接"><a href="#右外链接" class="headerlink" title="右外链接"></a>右外链接</h5><p>同样是进行多张表的联合查询，但显示join右边表的所有数据：</p>
+<ul>
+<li><p>第一种方式，使用where过滤并在where子句中将join左边的表名后面加(+);</p>
+<pre><code>select p.name, pt.name
+from products p, product_types pt
+where p.product_type_id(+) = pt.product_type_id;
+</code></pre></li>
+<li><p>第二种方式，使用…right outer join…using…子句;</p>
+<pre><code>select p.name,pt.name
+from products p right outer join product_types pt
+using(product_type_id);
+</code></pre></li>
+</ul>
+<h5 id="全外链接"><a href="#全外链接" class="headerlink" title="全外链接"></a>全外链接</h5><p>同样是进行多张表的联合查询，但显示所有数据，使用…full outer join…using</p>
+<p><em>题外话：其实我觉得oracle很多语句就像说英语一样，比较通顺，个人觉得还是比较容易理解的。。。</em></p>
+<pre><code>select p.name,pt.name
+from products p full outer join product_types pt
+using(product_type_id);
+</code></pre><h5 id="自连接"><a href="#自连接" class="headerlink" title="自连接"></a>自连接</h5><p>如题所说，自己和自己连接，用来实现一些简单查询无法实现或者实现起来较麻烦的查询，注意和内连接区分，内连接是多张表联合查询，自连接使只对一张表进行查询：</p>
+<pre><code>select w.last_name||&apos; works for &apos;||m.last_name
+from employees w inner join employees m
+on w.manager_id=m.employee_id;
+</code></pre><h5 id="Group-by子句"><a href="#Group-by子句" class="headerlink" title="Group by子句"></a>Group by子句</h5><p>用于对行进行分组，也可以和<code>聚合函数</code> 配合，统计各组的信息：</p>
+<pre><code>//根据product_type_id进行分组，统计rowid,然后按照product_type_id排序
+select product_type_id,count(rowid)
+from products
+group by product_type_id
+order by product_type_id;
+</code></pre><h3 id="基础函数"><a href="#基础函数" class="headerlink" title="基础函数"></a>基础函数</h3><h4 id="字符函数"><a href="#字符函数" class="headerlink" title="字符函数"></a>字符函数</h4><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>INITCAP(s)</td>
+<td>返回s字符串首字母大写、其他字母小写的格式</td>
+</tr>
+<tr>
+<td>LOWER(s)</td>
+<td>返回s字符串所有字母小写的格式</td>
+</tr>
+<tr>
+<td>UPPER(s)</td>
+<td>返回s字符串所有字母大写的格式</td>
+</tr>
+<tr>
+<td>LENGTH(s)</td>
+<td>返回s字符串的长度</td>
+</tr>
+<tr>
+<td>SUBSTR(s,start[,length])</td>
+<td>返回s的子串，从s的第start个字符开始，连续取length个字符；如果不写length，表示取到结尾</td>
+</tr>
+<tr>
+<td>INSTR(s,find[,start][,occurrence])</td>
+<td>在字符串s中查找字符串find，返回find所在位置是s的第几个字符。start表示从s的第几个字符开始查找，occurrence表示返回第几次出现的位置</td>
+</tr>
+<tr>
+<td>REPLACE(s,find,replace_string)</td>
+<td>把s中所有的字符串find都替换成replace_string</td>
+</tr>
+<tr>
+<td>CONCAT(s1,s2)</td>
+<td>返回s1和s2字符串连接后的字符串，等价于`s1</td>
+<td></td>
+<td>s2`</td>
+</tr>
+<tr>
+<td>NVL(x,value)</td>
+<td>如果x的值为空，则返回value；否则返回x</td>
+</tr>
+</tbody>
+</table>
+<p>eg.    </p>
+<pre><code>// 若phone为空，查询结果中该行由&apos;Unknown phone number&apos;取代，其余不变
+select customer_id,nvl(phone,&apos;Unknown phone number&apos;)
+from customers;
+</code></pre><h4 id="数字函数"><a href="#数字函数" class="headerlink" title="数字函数"></a>数字函数</h4><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ABS(x)</td>
+<td>返回x的绝对值</td>
+</tr>
+<tr>
+<td>SIGN(x)</td>
+<td>如果x为正，则返回1；如果为负，则返回-1；如果为0，则返回0</td>
+</tr>
+<tr>
+<td>CEIL(x)</td>
+<td>返回大于或等于x的最小整数</td>
+</tr>
+<tr>
+<td>FLOOR(x)</td>
+<td>返回小于或等于x的最小整数</td>
+</tr>
+<tr>
+<td>ROUND(x[,y])</td>
+<td>返回x四舍五入后的结果，如果有参数y表示在小数点后第y位四舍五入</td>
+</tr>
+<tr>
+<td>TRUNC(x[,y])</td>
+<td>返回x的整数部分，如果有参数y表示在小数点后第y位进行截断</td>
+</tr>
+<tr>
+<td>POWER(x,y)</td>
+<td>返回x的y次幂</td>
+</tr>
+<tr>
+<td>EXP(x)</td>
+<td>返回e的x次幂</td>
+</tr>
+<tr>
+<td>LOG(x,y)</td>
+<td>返回以x为底、y的对数</td>
+</tr>
+<tr>
+<td>LN(x)</td>
+<td>返回以e为底、x的对数</td>
+</tr>
+<tr>
+<td>SQRT(x)</td>
+<td>返回x的平方根</td>
+</tr>
+</tbody>
+</table>
+<h4 id="转换函数"><a href="#转换函数" class="headerlink" title="转换函数"></a>转换函数</h4><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TO_NUMBER(x[,format])</td>
+<td>把x转换成数字</td>
+</tr>
+<tr>
+<td>TO_CHAR(x[,format])</td>
+<td>把x转换成字符串</td>
+</tr>
+<tr>
+<td>TO_DATE(x[,format])</td>
+<td>把x转换成日期</td>
+</tr>
+</tbody>
+</table>
+<p>eg.</p>
+<pre><code>//将dob从日期型转为字符型
+select * from customers
+where to_char(dob,&apos;yyyy&apos;)=&apos;1971&apos;;
+</code></pre><h4 id="聚合函数"><a href="#聚合函数" class="headerlink" title="聚合函数"></a>聚合函数</h4><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>count(x)</td>
+<td>统计行数,count(*)会造成效率损失</td>
+</tr>
+<tr>
+<td>SUM(x)</td>
+<td>用于统计某列的值的总和</td>
+</tr>
+<tr>
+<td>AVG(x)</td>
+<td>用于统计某列的平均值</td>
+</tr>
+<tr>
+<td>MAX(x)</td>
+<td>用于统计某一列的最大值</td>
+</tr>
+<tr>
+<td>MEDIAN(x)</td>
+<td>用于统计某一列的中间值</td>
+</tr>
+<tr>
+<td>MIN(x)</td>
+<td>用于统计某一列的最小值</td>
+</tr>
+</tbody>
+</table>
+<p>eg.</p>
+<pre><code>//统计product_id的行数
+select count(product_id) 
+from products;
+</code></pre><p><strong>聚合函数中，只有count(*)会统计空值(NULL)。</strong></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/blog/tags/学习笔记/" rel="tag"># 学习笔记</a>
+          
+            <a href="/blog/tags/数据库/" rel="tag"># 数据库</a>
+          
+            <a href="/blog/tags/Oracle/" rel="tag"># Oracle</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2015/03/19/八数码问题/" rel="next" title="八数码问题">
+                <i class="fa fa-chevron-left"></i> 八数码问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2015/11/12/Android开发最佳实践/" rel="prev" title="Android开发最佳实践">
+                Android开发最佳实践 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/blog/images/avatar.jpeg"
+               alt="三筒" />
+          <p class="site-author-name" itemprop="name">三筒</p>
+           
+              <p class="site-description motion-element" itemprop="description">Some bit of this, some bit of that</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/blog/archives/">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/blog/tags/index.html">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/santong" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      Github
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/bensendbs" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                    
+                      Twitter
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2090396125/home?wvr=5&lf=reg" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本信息"><span class="nav-number">1.</span> <span class="nav-text">基本信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基础SQL语句"><span class="nav-number">2.</span> <span class="nav-text">基础SQL语句</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#基础知识"><span class="nav-number">2.1.</span> <span class="nav-text">基础知识</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查询语句"><span class="nav-number">2.2.</span> <span class="nav-text">查询语句</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#表示所有列："><span class="nav-number">2.2.1.</span> <span class="nav-text">*表示所有列：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#where语句来过滤行："><span class="nav-number">2.2.2.</span> <span class="nav-text">where语句来过滤行：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#any和some"><span class="nav-number">2.2.3.</span> <span class="nav-text">any和some</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#all"><span class="nav-number">2.2.4.</span> <span class="nav-text">all</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#like和not-like"><span class="nav-number">2.2.5.</span> <span class="nav-text">like和not like</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#escape"><span class="nav-number">2.2.6.</span> <span class="nav-text">escape</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#in和not-in"><span class="nav-number">2.2.7.</span> <span class="nav-text">in和not in</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#between"><span class="nav-number">2.2.8.</span> <span class="nav-text">between</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#order-by子句"><span class="nav-number">2.2.9.</span> <span class="nav-text">order by子句</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#内连接"><span class="nav-number">2.2.10.</span> <span class="nav-text">内连接</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#左外链接"><span class="nav-number">2.2.11.</span> <span class="nav-text">左外链接</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#右外链接"><span class="nav-number">2.2.12.</span> <span class="nav-text">右外链接</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#全外链接"><span class="nav-number">2.2.13.</span> <span class="nav-text">全外链接</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#自连接"><span class="nav-number">2.2.14.</span> <span class="nav-text">自连接</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Group-by子句"><span class="nav-number">2.2.15.</span> <span class="nav-text">Group by子句</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基础函数"><span class="nav-number">3.</span> <span class="nav-text">基础函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#字符函数"><span class="nav-number">3.1.</span> <span class="nav-text">字符函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数字函数"><span class="nav-number">3.2.</span> <span class="nav-text">数字函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#转换函数"><span class="nav-number">3.3.</span> <span class="nav-text">转换函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#聚合函数"><span class="nav-number">3.4.</span> <span class="nav-text">聚合函数</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">三筒</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/blog/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/blog/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/blog/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/blog/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/blog/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/blog/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

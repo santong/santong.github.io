@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/blog/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/blog/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="算法,人工智能,AI,八数码," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/blog/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="上周人工智能课上老师要求证明如下两个关于八数码问题的结论：  8数码问题的状态空间是两张独立的连通图; 8数码问题的状态可以划分为两个不相交的集合,每个集合中的状态经过任意多步移动操作都不能转化成另一个集合中的状态。  在结合一些资料进行思考后，我给出的详细证明如下。 如果发现不严谨或是逻辑错误还望留言指正。">
+<meta name="keywords" content="算法,人工智能,AI,八数码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="八数码问题">
+<meta property="og:url" content="http://santong.me/blog/2015/03/19/八数码问题/index.html">
+<meta property="og:site_name" content="三筒">
+<meta property="og:description" content="上周人工智能课上老师要求证明如下两个关于八数码问题的结论：  8数码问题的状态空间是两张独立的连通图; 8数码问题的状态可以划分为两个不相交的集合,每个集合中的状态经过任意多步移动操作都不能转化成另一个集合中的状态。  在结合一些资料进行思考后，我给出的详细证明如下。 如果发现不严谨或是逻辑错误还望留言指正。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-08-13T12:33:27.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="八数码问题">
+<meta name="twitter:description" content="上周人工智能课上老师要求证明如下两个关于八数码问题的结论：  8数码问题的状态空间是两张独立的连通图; 8数码问题的状态可以划分为两个不相交的集合,每个集合中的状态经过任意多步移动操作都不能转化成另一个集合中的状态。  在结合一些资料进行思考后，我给出的详细证明如下。 如果发现不严谨或是逻辑错误还望留言指正。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blog/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://santong.me/blog/2015/03/19/八数码问题/"/>
+
+
+
+
+
+  <title>八数码问题 | 三筒</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blog/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">三筒</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/blog/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/blog/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/blog/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/blog/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://santong.me/blog/blog/2015/03/19/八数码问题/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="三筒">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/blog/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="三筒">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">八数码问题</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-03-19T17:09:50+08:00">
+                2015-03-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>上周人工智能课上老师要求证明如下两个关于八数码问题的结论：</p>
+<ul>
+<li>8数码问题的状态空间是两张独立的连通图;</li>
+<li>8数码问题的状态可以划分为两个不相交的集合,每个集合中的状态经过任意多步移动操作都不能转化成另一个集合中的状态。</li>
+</ul>
+<p>在结合一些资料进行思考后，我给出的详细证明如下。</p>
+<p>如果发现不严谨或是逻辑错误还望留言指正。</p>
+<a id="more"></a>
+<h4 id="证明："><a href="#证明：" class="headerlink" title="证明："></a>证明：</h4><p>设八数码的解集如下：<code>(1)</code></p>
+<pre><code>1       2       3
+
+4       5       6        
+
+7       8       n    
+</code></pre><p>其中n = 0（即不影响数码的逆序数(见附录1条目1））。</p>
+<p>假设可看做从左到右从上至下排列的字符串：a[7]=1 2 3 4 5 6 7 8。</p>
+<p>∴a[7]的逆序数 t = 0，即t为偶数;</p>
+<p>∵八数码的位移规则为：空格上移，空格下移，空格左移，空格右移。</p>
+<p>∵空格n为0</p>
+<p>∴空格的左移和右移不会改变t的值，既不改变逆序数的奇偶性。 <code>（2）</code></p>
+<p>设移动的数码为a[i] = x;</p>
+<p>当空格上移或下移时，在此假设上移，</p>
+<p>∵上下两位数码相差2位</p>
+<p>∴ a[7] = a[1] … <strong>x</strong> a[i+1]…a[8]</p>
+<p>=&gt; a[1]a[2] …a[i+1]a[i+2] <strong>x</strong> …a[8]; </p>
+<p>这一过程可以简单的看做x与a[i+1]和a[i+2]的简单交换，即只移动2次，</p>
+<p>由附录1推论2、3可知，数列经过n次相邻数码交换后，若n为偶数则逆序数的奇偶性不变。  <code>（3）</code></p>
+<p>∴由（2）（3）可知，棋子在既定的规则中移动不会改变逆序数的奇偶性。</p>
+<p><strong>易知：</strong>8数码的解集是（1）中状态经过空格任意上移、下移、左移、右移后的所有状态的集合。</p>
+<p>又∵空格的上移、下移、左移、右移并不会改变逆序数的奇偶性</p>
+<p>∴当a[7]的逆序数t为偶数时，一定有解</p>
+<p>又∵在有解状态下,t不可能为奇数</p>
+<p>∴当a[7]的逆序数t为奇数时，一定无解</p>
+<p><strong>即8数码问题中每个集合中的状态经过任意多步移动操作都不能转化成另一个集合中的状态。</strong> </p>
+<p><strong>但是不能证明8数码问题的状态空间是两张独立的连通图或者8数码问题的状态可以划分为两个不相交的集合。</strong></p>
+<p>又∵八数码的所有可能性为9!，其中偶排列==奇排列</p>
+<p>可证八数码问题的解共有9!/2=181440。</p>
+<p><strong>下面证明8数码问题的状态空间是两张独立的连通图</strong></p>
+<p>这里我参考了下面参考(3)提供的思路，但是参考(3)的最后的证明可能会有一些没有解释清楚的小问题。</p>
+<p><strong>下面给出我的证明：</strong></p>
+<p>要想证明8数码问题的状态空间是两张独立的连通图，只要证明8数码的奇排列和偶排列的内部分别可互达，即各个有解的状态可已经过若干步相互转换，无解的状态同样如此。</p>
+<p>可知：</p>
+<pre><code>0 1 2 3 4 5 6 7 8  是八数码问题的一个有解情况，是偶排列；
+
+0 2 1 3 4 5 6 7 8  是八数码问题的一个无解情况，是奇排列。
+</code></pre><p>这两个数列是我从有解和无解情况中选出的特例，如果再有解情况下都可以转化为0 1 2 3 4 5 6 7 8，无解情况下都可以转化为0 2 1 3 4 5 6 7 8，那么即可证明8数码问题的状态空间是两张独立的连通图（数学归纳法）且连通图内部可互达。</p>
+<p>x表示任意不同数字，为方便说明，所以用同一字母表示</p>
+<pre><code>a    b    c     (L1)
+0    x    x      (L2)
+x    x    x      (L3)
+</code></pre><p>如果可以证明 a b c 0可以在第（L1）、（L2）层经过若干次移动使得每一位都能移动到<code>a b c 0</code>中的最后一位同时不影响其他数码的位置，即可利用递推的原理，证明每一层都可以经过若干步排列整齐，即可证明8数码问题的状态空间是两张独立的连通图，进而证明8数码问题的状态可以划分为<strong>两个不相交</strong>的集合。</p>
+<p>再进一步考虑，只要<code>a b c 0</code>都可以移动到这四个位置的某一位，就可以的推论出上面的假设。</p>
+<p>这里我们选择末尾，可以很清楚的看出来 <code>a b c 0</code>, <code>0 b c a</code>,<code>b 0 c a</code>, <code>b c 0 a</code>, <code>0 c a b</code>很容易在不影响其他数码的位置经过简单几步移动得到，要说明的是，<code>b c 0 a</code> ==&gt; <code>b c a 0</code>是需要多几步才能得到（可能是我比较笨，开始的时候不知道怎么移动花了挺多时间才搞定，所以现在记下来便于理解）；</p>
+<p>步骤如下(j,k ∈ Z，0 &lt; j &lt; 9, 0 &lt; k &lt; 9,且 j != k != a != b != c)：</p>
+<pre><code>a b c    b c 0    c 0 k    c a k    c a 0    b c a
+0 j k =&gt; a j k =&gt; b a j =&gt; b 0 j =&gt; b j k =&gt; 0 j k 
+x x x    x x x    x x x    x x x    x x x    x x x 
+</code></pre><p>可以看到，在<code>a b c 0</code>移动至<code>b c a 0</code>的过程<code>j k</code>的位置同样没有发生改变，所以可证明在第一层可以在不影响其他数码位置的情况下经过若干步排列整齐。</p>
+<p>通过递归，可以推论每一层都可以经过若干步排列整齐，即该问题的图是连通图，处处可达。</p>
+<pre><code>∴当a b c分别为1 2 3时，该排列是偶排列，有解；
+ 当a b c分别为2 1 3时，该排列是奇排列，无解。
+</code></pre><p><strong>结合上面证毕的奇排列和偶排列相互不可达，可以得出结论：</strong></p>
+<p><strong>8数码问题的状态可以划分为两个不相交的集合且状态空间是两张独立的连通图。</strong></p>
+<p><strong>证毕。</strong></p>
+<h4 id="附录1：概念解释及推论证明"><a href="#附录1：概念解释及推论证明" class="headerlink" title="附录1：概念解释及推论证明"></a>附录1：概念解释及推论证明</h4><p><strong>1.逆序数：</strong>在一个排列中，如果一对数的前后位置与大小顺序相反，即前面的数大于后面的数，那么它们就称为一个逆序。一个排列中逆序的总数就称为这个排列的逆序数。逆序数为偶数的排列称为偶排列；逆序数为奇数的排列称为奇排列。</p>
+<p><strong>2.</strong>如果交换任何两个相邻的棋子，那么棋子数列的逆序数将发生奇偶性互变（奇偶性互变是指由奇数变为偶数，或由偶数变为奇数）。</p>
+<p>证明：假设交换的是a[i]和a[i+1]，那么对于a[j]（1≤j≤i-1或i+2≤j≤8）的逆序数并不改变。若交换之前 a[i]a[i+1]，那么交换之后，a[i]的逆序数不变，而a[i+1]的逆序数加1（因为a[i]成了它的一个逆序）；同理，若交换之前 a[i]&gt;a[i+1]，那么交换之后，a[i]的逆序数减1，而c[i+1]的逆序数不变。所以上述推论成立。</p>
+<p><strong>3.</strong>如果棋子数列经过n次相邻棋子交换后，若n为偶数，则数列逆序数奇偶性不变；若n为奇数，则数列逆序数将发生奇偶性互变。其证明可以由推论2简单推出。</p>
+<h4 id="附录2：参考资料："><a href="#附录2：参考资料：" class="headerlink" title="附录2：参考资料："></a>附录2：参考资料：</h4><p><em>(1)百度百科，逆序数的概念：<a href="http://baike.baidu.com/link?url=0Wo8I_20Wz7hW8lgJlB--uzkNuis7HPuh-DbcGxYM7LBuwkpFVC9ZfZGnIESKo8kqwc_NhLKyrq2KBmnJoi4uK" target="_blank" rel="external">http://baike.baidu.com/link?url=0Wo8I_20Wz7hW8lgJlB--uzkNuis7HPuh-DbcGxYM7LBuwkpFVC9ZfZGnIESKo8kqwc_NhLKyrq2KBmnJoi4uK</a><br>(2)八数码问题的可解性讨论：<a href="http://bbs.chinaunix.net/thread-1281258-1-1.html" target="_blank" rel="external">http://bbs.chinaunix.net/thread-1281258-1-1.html</a><br>(3)再论八数码：<a href="http://blog.csdn.net/ju136/article/details/6876647" target="_blank" rel="external">http://blog.csdn.net/ju136/article/details/6876647</a></em></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/blog/tags/算法/" rel="tag"># 算法</a>
+          
+            <a href="/blog/tags/人工智能/" rel="tag"># 人工智能</a>
+          
+            <a href="/blog/tags/AI/" rel="tag"># AI</a>
+          
+            <a href="/blog/tags/八数码/" rel="tag"># 八数码</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2015/03/06/Hello-World/" rel="next" title="Hello World.">
+                <i class="fa fa-chevron-left"></i> Hello World.
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2015/04/08/Oracle 知识点整理/" rel="prev" title="Oracle 基础知识">
+                Oracle 基础知识 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/blog/images/avatar.jpeg"
+               alt="三筒" />
+          <p class="site-author-name" itemprop="name">三筒</p>
+           
+              <p class="site-description motion-element" itemprop="description">Some bit of this, some bit of that</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/blog/archives/">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/blog/tags/index.html">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/santong" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      Github
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/bensendbs" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                    
+                      Twitter
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2090396125/home?wvr=5&lf=reg" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#证明："><span class="nav-number">1.</span> <span class="nav-text">证明：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#附录1：概念解释及推论证明"><span class="nav-number">2.</span> <span class="nav-text">附录1：概念解释及推论证明</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#附录2：参考资料："><span class="nav-number">3.</span> <span class="nav-text">附录2：参考资料：</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">三筒</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/blog/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/blog/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/blog/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/blog/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/blog/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/blog/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/blog/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/blog/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android,学习笔记," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/blog/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="前一阵子在翻译Android最佳开发实践的时候查了很多文档，也是在那个时候才了解Model-View-Presenter(MVP)设计模式，一种正在被更广泛接受和使用的Android架构，你可以在这个issue里找到一些讨论。 不过这种架构具体的优势或者思想我不打算在这里赘述，你可以在wiki和这个链接里找到其详细的解释。 如果你看了前面两篇文档或者查过一些资料的话，你应该会了解到，目前为止，没有">
+<meta name="keywords" content="Android,学习笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android MVP设计模式学习笔记">
+<meta property="og:url" content="http://santong.me/blog/2015/11/19/android_mvp/index.html">
+<meta property="og:site_name" content="三筒">
+<meta property="og:description" content="前一阵子在翻译Android最佳开发实践的时候查了很多文档，也是在那个时候才了解Model-View-Presenter(MVP)设计模式，一种正在被更广泛接受和使用的Android架构，你可以在这个issue里找到一些讨论。 不过这种架构具体的优势或者思想我不打算在这里赘述，你可以在wiki和这个链接里找到其详细的解释。 如果你看了前面两篇文档或者查过一些资料的话，你应该会了解到，目前为止，没有">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://7xoiwu.com1.z0.glb.clouddn.com/mvp_model.png">
+<meta property="og:updated_time" content="2017-08-13T12:36:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android MVP设计模式学习笔记">
+<meta name="twitter:description" content="前一阵子在翻译Android最佳开发实践的时候查了很多文档，也是在那个时候才了解Model-View-Presenter(MVP)设计模式，一种正在被更广泛接受和使用的Android架构，你可以在这个issue里找到一些讨论。 不过这种架构具体的优势或者思想我不打算在这里赘述，你可以在wiki和这个链接里找到其详细的解释。 如果你看了前面两篇文档或者查过一些资料的话，你应该会了解到，目前为止，没有">
+<meta name="twitter:image" content="http://7xoiwu.com1.z0.glb.clouddn.com/mvp_model.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blog/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://santong.me/blog/2015/11/19/android_mvp/"/>
+
+
+
+
+
+  <title>Android MVP设计模式学习笔记 | 三筒</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blog/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">三筒</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/blog/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/blog/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/blog/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/blog/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://santong.me/blog/blog/2015/11/19/android_mvp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="三筒">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/blog/images/avatar.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="三筒">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android MVP设计模式学习笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-11-19T19:36:49+08:00">
+                2015-11-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>前一阵子在翻译<a href="http://santong.me/2015/11/12/Best-practices-in-Android-development/">Android最佳开发实践</a>的时候查了很多文档，也是在那个时候才了解Model-View-Presenter(MVP)设计模式，一种正在被更广泛接受和使用的Android架构，你可以在这个<a href="https://github.com/futurice/android-best-practices/issues/83" target="_blank" rel="external">issue</a>里找到一些讨论。</p>
+<p>不过这种架构具体的优势或者思想我不打算在这里赘述，你可以在<a href="https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter#Implementation_in_Java" target="_blank" rel="external">wiki</a>和<a href="http://blog.sqisland.com/2015/11/mvp-missing-link.html" target="_blank" rel="external">这个链接</a>里找到其详细的解释。</p>
+<p>如果你看了前面两篇文档或者查过一些资料的话，你应该会了解到，目前为止，<strong>没有一个标准的MVP模式</strong>，我在学习这种模式的时候也看到了很多种不同的架构，比如:<a href="https://github.com/bboyfeiyu/android-tech-frontier/tree/master/androidweekly/%E4%B8%80%E7%A7%8D%E5%9C%A8android%E4%B8%AD%E5%AE%9E%E7%8E%B0MVP%E6%A8%A1%E5%BC%8F%E7%9A%84%E6%96%B0%E6%80%9D%E8%B7%AF" target="_blank" rel="external">1</a> <a href="http://saulmm.github.io/a-useful-stack-on-android-2-user-interface/" target="_blank" rel="external">2</a> <a href="https://www.code-labs.io/codelabs/android-testing/#4" target="_blank" rel="external">3</a>。所以下面我将介绍我的实现方式。</p>
+<p>需要说明的是，我的实现主要依据最后一个链接中<a href="https://www.code-labs.io/" target="_blank" rel="external">Codelab</a>的实现方式，可能并不是最好的选择。</p>
+<p>需要的话，可以在我的github上找到<a href="https://github.com/santong/MVP" target="_blank" rel="external">这个Demo的源码</a>。</p>
+<a id="more"></a>
+<h1 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h1><p>在说明原理之前，上一张MVP的架构图:<br><img src="http://7xoiwu.com1.z0.glb.clouddn.com/mvp_model.png" alt="android_mvp"></p>
+<p>可以看到，Model和View之间的交互是通过Presenter完成的，而Presenter与Model和View之间的交流则是通过接口调用来实现的。</p>
+<p>在这里你需要注意以下几点(参考<a href="http://wiki.jikexueyuan.com/project/notes/Android-Java/MVP.html" target="_blank" rel="external">极客学院的wiki</a>):</p>
+<blockquote>
+<ul>
+<li>view通常会持有presenter的引用；</li>
+<li>presenter持有view和model的引用；</li>
+<li>model应该包括数据和对数据的获取或者修改操作；</li>
+</ul>
+</blockquote>
+<h1 id="一个简单的例子"><a href="#一个简单的例子" class="headerlink" title="一个简单的例子"></a>一个简单的例子</h1><p>正如同几乎每个人写的第一行代码都是从简单的打印一句”Hello World!”开始，我给出的例子也是在Android设备上打印一句”Hello World!”。可能我比较笨，每次学习新的结构或者编程语言的时候都想找一个尽可能简单的例子入手学习。所以，我给出的例子也尽可能简单。</p>
+<p>我的项目结构看起来类似这样:</p>
+<pre><code>me.santong.mvp
+    ├── model
+    │   ├── ImpMessageData.java
+    │   ├── Message.java
+    │   └── MessageRepository.java
+    ├── presenter
+    │   ├── Contact.java
+    │   └── Present.java
+    └── view
+        ├── MessageActivity.java
+        └── MessageFragment.java
+</code></pre><p>这个结构有点像MVC的项目分层，其实我觉得，项目结构的样子只要合理便无关痛痒，重要的是自己的习惯(//或者老板的要求…)。因为我只是展示一个简单的例子，所以我并没有把结构搞得很复杂。</p>
+<p>首先先说一下核心:</p>
+<h2 id="Contact-java"><a href="#Contact-java" class="headerlink" title="Contact.java:"></a><a href="https://github.com/santong/MVP/blob/master/app/src/main/java/me/santong/mvp/presenter/Contact.java" target="_blank" rel="external"><strong>Contact.java</strong></a>:</h2><pre><code>public interface Contact {
+    interface View{
+        void showMessage(Message message);
+    }
+
+    interface UserListener{
+        void setMessage(Message message);
+    }
+}
+</code></pre><p>这个接口相当于View和Presenter之间的桥梁即上图中View和Presenter中的两根线。在有些MVP架构的实现中，有时会把这个联系关系写成两个接口，而不是像我这样写在一个嵌套接口当中。</p>
+<p>这个接口的作用有两点:</p>
+<ul>
+<li>使得View层中展示需要展示的内容；</li>
+<li>监听用户的操作并交给Presenter处理。</li>
+</ul>
+<p><strong>Tip:</strong> 因为我比较懒…setMessage(Message message)这个方法我并没有去实现，只是打印了一句”Hello world”。</p>
+<h2 id="MessageRepository"><a href="#MessageRepository" class="headerlink" title="MessageRepository:"></a><a href="https://github.com/santong/MVP/blob/master/app/src/main/java/me/santong/mvp/model/MessageRepository.java" target="_blank" rel="external"><strong>MessageRepository</strong></a>:</h2><pre><code>public interface MessageRepository {
+    Map&lt;Integer, Message&gt; getMessages();
+
+    Message getMessage(int id);
+
+    void saveMessage(@NonNull Message message);
+}
+</code></pre><p>这是连接Presenter和Model的线，然后使用<a href="https://github.com/santong/MVP/blob/master/app/src/main/java/me/santong/mvp/model/ImpMessageData.java" target="_blank" rel="external"><strong>ImpMessageData</strong></a>来存取数据。当然这是一种偷懒的写法，甚至可以说，我实现的挺烂的，没有在意耦合或者复杂的存储，也没有过多的去考虑命名等等一系列问题。</p>
+<p>这里我只是模拟简单的数据，在生产环境中，你可能需要操作数据库，解析后台返回的JSON串等等，代码复杂度可不止这一点。</p>
+<p>不过殊途同归，无论怎么复杂，最终都需要和Presenter结合在一起，毕竟这个才是心脏。</p>
+<h2 id="Presenter"><a href="#Presenter" class="headerlink" title="Presenter:"></a><a href="https://github.com/santong/MVP/blob/master/app/src/main/java/me/santong/mvp/presenter/Presenter.java" target="_blank" rel="external"><strong>Presenter</strong></a>:</h2><pre><code>public class Presenter implements Contact.UserListener {
+
+    private Contact.View mView;
+
+    private MessageRepository mdata;
+
+
+    public Presenter(Contact.View view, MessageRepository messageRepository) {
+        mView = view;
+        mdata = messageRepository;
+        onBindData();
+    }
+
+    private void onBindData() {
+        Message message = mdata.getMessage(0);
+        setMessage(message);
+    }
+
+    @Override
+    public void setMessage(Message message) {
+        mView.showMessage(message);
+    }
+}    
+</code></pre><p>你可以看到，我在构造函数中将实现<code>Contact.View</code>和<code>MessageRepository</code>两个接口的对象即<a href="https://github.com/santong/MVP/blob/master/app/src/main/java/me/santong/mvp/view/MessageFragment.java" target="_blank" rel="external"><strong>MessageFragment</strong></a>和<a href="https://github.com/santong/MVP/blob/master/app/src/main/java/me/santong/mvp/model/ImpMessageData.java" target="_blank" rel="external"><strong>ImpMessageData</strong></a>传了进去，前者是负责展示UI的Fragment对象，后者刚才介绍过的，负责数据的处理，这样，我们就可以很方便的用这两个对象来完成业务逻辑。</p>
+<p>另一方面，我在<a href="https://github.com/santong/MVP/blob/master/app/src/main/java/me/santong/mvp/view/MessageFragment.java" target="_blank" rel="external"><strong>MessageFragment</strong></a>实例化了一个userListener的对象，通过调用userListener中的方法来处理业务逻辑，同时我们可以在<a href="https://github.com/santong/MVP/blob/master/app/src/main/java/me/santong/mvp/presenter/Presenter.java" target="_blank" rel="external"><strong>Presenter</strong></a>中实现<code>Contact.UserListener</code>这个接口对用户的响应进行操作。</p>
+<p>当然，我在这个例子中没有实现用户响应的部分，所以可能看不到在Presenter中实现这个接口的意义。</p>
+<p>总体来说，这就是一个简单的MVP架构的Demo，并没有特别复杂，我觉得也比较好理解。如果有什么问题可以留言给我。</p>
+<h1 id="再见，Presenter？"><a href="#再见，Presenter？" class="headerlink" title="再见，Presenter？"></a>再见，Presenter？</h1><p><strong>等等，这还不是结束。</strong></p>
+<p>我在查资料学习MVP架构的时候也看到了一些关于MVVM架构的信息，当时我并没有在意。当我好不容易对MVP有一些理解的时候我看到了这篇文章:<a href="http://tech.vg.no/2015/07/17/android-databinding-goodbye-presenter-hello-viewmodel/" target="_blank" rel="external">ANDROID DATABINDING: GOODBYE PRESENTER, HELLO VIEWMODEL!</a>，大意是Google在2015年的I/O大会上展示了预览版的Android M中的一个库，<a href="https://developer.android.com/tools/data-binding/guide.html" target="_blank" rel="external">Data Binding</a>，可以很轻松的替代Presenter的功能，使得代码更加简单和强大，我那个泪奔啊…</p>
+<p>那是否意味着在Android开发中，MVP已经不是好的选择了?</p>
+<p>我觉得并不是，MVP架构其实已经发展了很久了，只是最近才火了起来，相对而言更加稳定，也是目前比较好的选择。另一方面，个人认为，至少在市场占有率上，Android 5.0(Lollipop)以上的设备不足10%(根据Android studio的提示，不靠谱找谷歌…)，所以目前应该是不用着急去掌握MVVM；再者说，MVVM思想其实和MVP也有异曲同工的地方，虽然以后可能早晚要学习这个架构，但是现在掌握了MVP架构，我想可以为之后的学习带来更大的帮助。</p>
+<p>补充阅读: <a href="http://www.ruanyifeng.com/blog/2015/02/mvcmvp_mvvm.html" target="_blank" rel="external">MVC,MVP和MVVM的区别</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/blog/tags/Android/" rel="tag"># Android</a>
+          
+            <a href="/blog/tags/学习笔记/" rel="tag"># 学习笔记</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2015/11/12/Android开发最佳实践/" rel="next" title="Android开发最佳实践">
+                <i class="fa fa-chevron-left"></i> Android开发最佳实践
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2016/05/14/使用.acv文件生成滤镜/" rel="prev" title=".acv文件是什么">
+                .acv文件是什么 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/blog/images/avatar.jpeg"
+               alt="三筒" />
+          <p class="site-author-name" itemprop="name">三筒</p>
+           
+              <p class="site-description motion-element" itemprop="description">Some bit of this, some bit of that</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/blog/archives/">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/blog/tags/index.html">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/santong" target="_blank" title="Github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      Github
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/bensendbs" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                    
+                      Twitter
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/2090396125/home?wvr=5&lf=reg" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                    
+                      Weibo
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#实现原理"><span class="nav-number">1.</span> <span class="nav-text">实现原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#一个简单的例子"><span class="nav-number">2.</span> <span class="nav-text">一个简单的例子</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Contact-java"><span class="nav-number">2.1.</span> <span class="nav-text">Contact.java:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MessageRepository"><span class="nav-number">2.2.</span> <span class="nav-text">MessageRepository:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Presenter"><span class="nav-number">2.3.</span> <span class="nav-text">Presenter:</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#再见，Presenter？"><span class="nav-number">3.</span> <span class="nav-text">再见，Presenter？</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">三筒</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/blog/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/blog/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/blog/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/blog/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/blog/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/blog/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
